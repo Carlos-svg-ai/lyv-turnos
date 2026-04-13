@@ -1,0 +1,819 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Turnos — LyV Indumentarias</title>
+  <meta name="description" content="Sacá tu turno online para LyV Indumentarias y evitá esperar." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --negro: #1a1008;
+      --dorado: #c8973a;
+      --dorado-claro: #f5e6c8;
+      --dorado-medio: #e8c47a;
+      --crema: #fdf8f0;
+      --gris: #888;
+      --verde: #2e6b3e;
+      --rojo: #8b2020;
+      --borde: #ede8df;
+    }
+
+    html, body {
+      min-height: 100vh;
+      background: var(--crema);
+      font-family: 'DM Sans', sans-serif;
+      color: var(--negro);
+    }
+
+    .app {
+      max-width: 480px;
+      margin: 0 auto;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 0 40px rgba(0,0,0,0.08);
+    }
+
+    /* ── HEADER ── */
+    .header {
+      background: var(--negro);
+      padding: 1.6rem 1.5rem 1.3rem;
+      text-align: center;
+    }
+    .header-badge {
+      font-size: 10px;
+      letter-spacing: 3px;
+      color: var(--dorado);
+      text-transform: uppercase;
+      margin-bottom: 6px;
+    }
+    .header h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: 28px;
+      color: #fff;
+      font-weight: 600;
+      line-height: 1.1;
+    }
+    .header h1 span { color: var(--dorado); }
+    .header-sub {
+      font-size: 12px;
+      color: rgba(255,255,255,0.45);
+      margin-top: 5px;
+      letter-spacing: 0.5px;
+    }
+
+    /* ── TABS ── */
+    .tab-bar {
+      display: flex;
+      background: #111;
+      border-bottom: 1px solid rgba(200,151,58,0.25);
+    }
+    .tab-btn {
+      flex: 1;
+      padding: 11px 8px;
+      background: none;
+      border: none;
+      border-bottom: 2px solid transparent;
+      color: rgba(255,255,255,0.4);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 11px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: color 0.2s, border-color 0.2s;
+    }
+    .tab-btn.active {
+      color: var(--dorado);
+      border-bottom-color: var(--dorado);
+    }
+
+    /* ── VIEWS ── */
+    .view { display: none; flex: 1; flex-direction: column; }
+    .view.active { display: flex; }
+
+    /* ── CLIENTE ── */
+    .client-content { padding: 1.4rem; flex: 1; }
+
+    .status-banner {
+      background: var(--negro);
+      border-radius: 12px;
+      padding: 0.9rem 1.1rem;
+      margin-bottom: 1.4rem;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .status-dot {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      background: #4caf50;
+      animation: pulse 1.5s infinite;
+      flex-shrink: 0;
+    }
+    @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
+    .status-text { font-size: 13px; color: rgba(255,255,255,0.75); }
+    .status-count { margin-left: auto; font-size: 13px; color: var(--dorado); font-weight: 500; }
+
+    .form-card {
+      background: #fff;
+      border-radius: 16px;
+      border: 1px solid rgba(200,151,58,0.18);
+      padding: 1.4rem;
+      margin-bottom: 1rem;
+    }
+    .form-card h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 19px;
+      margin-bottom: 1.2rem;
+    }
+
+    .field { margin-bottom: 1rem; }
+    .field label {
+      display: block;
+      font-size: 11px;
+      font-weight: 500;
+      color: var(--gris);
+      letter-spacing: 0.6px;
+      text-transform: uppercase;
+      margin-bottom: 6px;
+    }
+    .field input {
+      width: 100%;
+      padding: 11px 14px;
+      border: 1.5px solid var(--borde);
+      border-radius: 10px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 15px;
+      color: var(--negro);
+      background: var(--crema);
+      transition: border-color 0.2s, background 0.2s;
+      outline: none;
+      -webkit-appearance: none;
+    }
+    .field input:focus { border-color: var(--dorado); background: #fff; }
+    .field .hint { font-size: 11px; color: var(--gris); margin-top: 5px; }
+
+    .btn-primary {
+      width: 100%;
+      padding: 14px;
+      background: var(--negro);
+      color: var(--dorado);
+      border: none;
+      border-radius: 12px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 15px;
+      font-weight: 500;
+      letter-spacing: 0.5px;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.1s;
+      margin-top: 0.4rem;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .btn-primary:hover { background: #2a1f0f; }
+    .btn-primary:active { transform: scale(0.98); }
+
+    /* TICKET */
+    .ticket {
+      background: var(--negro);
+      border-radius: 16px;
+      padding: 1.8rem 1.4rem;
+      text-align: center;
+      display: none;
+      position: relative;
+      overflow: hidden;
+    }
+    .ticket::before {
+      content: '';
+      position: absolute;
+      top: -40px; right: -40px;
+      width: 120px; height: 120px;
+      border-radius: 50%;
+      background: rgba(200,151,58,0.07);
+    }
+    .ticket::after {
+      content: '';
+      position: absolute;
+      bottom: -30px; left: -20px;
+      width: 80px; height: 80px;
+      border-radius: 50%;
+      background: rgba(200,151,58,0.05);
+    }
+    .ticket-label {
+      font-size: 10px;
+      letter-spacing: 3px;
+      color: var(--dorado);
+      text-transform: uppercase;
+      margin-bottom: 10px;
+    }
+    .ticket-number {
+      font-family: 'Playfair Display', serif;
+      font-size: 80px;
+      color: var(--dorado);
+      line-height: 1;
+      font-weight: 600;
+    }
+    .ticket-name { font-size: 15px; color: rgba(255,255,255,0.75); margin-top: 12px; }
+    .ticket-meta { font-size: 11px; color: rgba(255,255,255,0.35); margin-top: 5px; letter-spacing: 0.5px; }
+    .ticket-divider { border: none; border-top: 1px dashed rgba(200,151,58,0.3); margin: 1.1rem 0; }
+    .ticket-tip { font-size: 12px; color: rgba(255,255,255,0.5); line-height: 1.6; }
+
+    .btn-nuevo {
+      margin-top: 1.2rem;
+      width: 100%;
+      padding: 11px;
+      background: transparent;
+      border: 1px solid rgba(200,151,58,0.35);
+      color: var(--dorado);
+      border-radius: 10px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 13px;
+      cursor: pointer;
+    }
+
+    /* ── ADMIN ── */
+    .admin-content { padding: 1.2rem; flex: 1; display: flex; flex-direction: column; }
+
+    .admin-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 1rem;
+    }
+    .admin-top h2 { font-family: 'Playfair Display', serif; font-size: 18px; }
+    .stat-pill {
+      background: var(--negro);
+      color: var(--dorado);
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 500;
+    }
+
+    .search-bar { display: flex; gap: 8px; margin-bottom: 1rem; }
+    .search-bar input {
+      flex: 1;
+      padding: 9px 12px;
+      border: 1.5px solid var(--borde);
+      border-radius: 10px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14px;
+      background: var(--crema);
+      outline: none;
+      color: var(--negro);
+      -webkit-appearance: none;
+    }
+    .search-bar input:focus { border-color: var(--dorado); }
+    .btn-clear {
+      padding: 9px 14px;
+      background: #ede8df;
+      border: none;
+      border-radius: 10px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 13px;
+      cursor: pointer;
+      color: var(--negro);
+    }
+
+    /* filtros */
+    .filter-bar { display: flex; gap: 6px; margin-bottom: 1rem; }
+    .filter-btn {
+      padding: 5px 12px;
+      border-radius: 20px;
+      border: 1.5px solid var(--borde);
+      background: #fff;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 12px;
+      cursor: pointer;
+      color: var(--gris);
+      transition: all 0.15s;
+    }
+    .filter-btn.active { background: var(--negro); color: var(--dorado); border-color: var(--negro); }
+
+    .turnos-list { flex: 1; }
+
+    .turno-card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid var(--borde);
+      padding: 0.85rem 1rem;
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      animation: slideIn 0.25s ease;
+    }
+    @keyframes slideIn { from{opacity:0;transform:translateY(-6px)} to{opacity:1;transform:translateY(0)} }
+
+    .turno-num {
+      width: 42px; height: 42px;
+      background: var(--negro);
+      border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'Playfair Display', serif;
+      font-size: 18px;
+      color: var(--dorado);
+      flex-shrink: 0;
+    }
+    .turno-num.atendido { background: #d8f0e0; color: var(--verde); }
+
+    .turno-info { flex: 1; min-width: 0; }
+    .turno-name { font-size: 14px; font-weight: 500; color: var(--negro); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .turno-meta { font-size: 11px; color: var(--gris); margin-top: 2px; }
+
+    .badge-wait { background: #fff8e8; color: #8b6914; border: 1px solid #f0d070; font-size: 10px; padding: 3px 8px; border-radius: 20px; font-weight: 500; white-space: nowrap; }
+    .badge-ok   { background: #eaf5ee; color: var(--verde); border: 1px solid #a8d8b5; font-size: 10px; padding: 3px 8px; border-radius: 20px; font-weight: 500; white-space: nowrap; }
+
+    .turno-actions { display: flex; gap: 5px; }
+    .btn-verify {
+      padding: 5px 10px;
+      background: var(--negro);
+      color: var(--dorado);
+      border: none;
+      border-radius: 8px;
+      font-size: 11px;
+      cursor: pointer;
+      font-family: 'DM Sans', sans-serif;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .btn-del {
+      padding: 5px 8px;
+      background: #fceaea;
+      color: var(--rojo);
+      border: 1px solid #f0c0c0;
+      border-radius: 8px;
+      font-size: 11px;
+      cursor: pointer;
+      font-family: 'DM Sans', sans-serif;
+    }
+
+    .empty-state { text-align: center; padding: 3rem 1rem; color: var(--gris); font-size: 14px; }
+
+    .btn-export {
+      width: 100%;
+      padding: 11px;
+      background: #f0ebe0;
+      border: none;
+      border-radius: 10px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 13px;
+      cursor: pointer;
+      color: var(--negro);
+      margin-top: 10px;
+    }
+    .btn-reset {
+      width: 100%;
+      padding: 10px;
+      background: #fceaea;
+      border: 1px solid #f0c0c0;
+      border-radius: 10px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 13px;
+      cursor: pointer;
+      color: var(--rojo);
+      margin-top: 6px;
+    }
+
+    /* ── MODAL ── */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.55);
+      z-index: 100;
+      align-items: flex-end;
+      justify-content: center;
+      padding: 0;
+    }
+    .modal-overlay.open { display: flex; }
+    .modal {
+      background: #fff;
+      border-radius: 20px 20px 0 0;
+      padding: 1.5rem;
+      width: 100%;
+      max-width: 480px;
+      animation: slideUp 0.25s ease;
+    }
+    @keyframes slideUp { from{transform:translateY(30px);opacity:0} to{transform:translateY(0);opacity:1} }
+    .modal-handle { width: 36px; height: 4px; background: var(--borde); border-radius: 2px; margin: 0 auto 1.2rem; }
+    .modal h3 { font-family: 'Playfair Display', serif; font-size: 18px; margin-bottom: 0.25rem; }
+    .modal p { font-size: 13px; color: var(--gris); margin-bottom: 1rem; }
+    .verify-row { display: flex; align-items: center; gap: 8px; padding: 10px 0; border-bottom: 1px solid #f5f0e8; }
+    .verify-row:last-of-type { border: none; }
+    .verify-label { font-size: 12px; color: var(--gris); width: 90px; flex-shrink: 0; }
+    .verify-val { font-size: 14px; font-weight: 500; color: var(--negro); }
+    .v-ok  { color: var(--verde); font-size: 12px; font-weight: 500; margin-left: auto; }
+    .v-bad { color: var(--rojo);  font-size: 12px; font-weight: 500; margin-left: auto; }
+    .modal-footer { display: flex; gap: 8px; margin-top: 1.2rem; }
+    .btn-modal {
+      flex: 1;
+      padding: 12px;
+      border-radius: 10px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      border: none;
+    }
+    .btn-modal-ok  { background: var(--negro); color: var(--dorado); }
+    .btn-modal-cancel { background: #f0ebe0; color: var(--negro); }
+
+    /* ── TOAST ── */
+    .toast {
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--negro);
+      color: var(--dorado);
+      padding: 10px 22px;
+      border-radius: 30px;
+      font-size: 13px;
+      font-weight: 500;
+      z-index: 200;
+      opacity: 0;
+      transition: opacity 0.3s;
+      white-space: nowrap;
+      pointer-events: none;
+    }
+    .toast.show { opacity: 1; }
+
+    /* ── PWA INSTALL ── */
+    .install-bar {
+      display: none;
+      background: var(--dorado-claro);
+      border-bottom: 1px solid var(--dorado-medio);
+      padding: 8px 14px;
+      align-items: center;
+      gap: 10px;
+      font-size: 12px;
+      color: #5a3a00;
+    }
+    .install-bar.show { display: flex; }
+    .install-bar button {
+      margin-left: auto;
+      padding: 5px 12px;
+      background: var(--negro);
+      color: var(--dorado);
+      border: none;
+      border-radius: 20px;
+      font-size: 11px;
+      cursor: pointer;
+      font-family: 'DM Sans', sans-serif;
+    }
+  </style>
+</head>
+<body>
+
+<div class="app" id="app">
+
+  <!-- install bar PWA -->
+  <div class="install-bar" id="install-bar">
+    <span>Instalá la app en tu celular para acceso rápido</span>
+    <button id="install-btn">Instalar</button>
+  </div>
+
+  <header class="header">
+    <div class="header-badge">Sistema de Turnos</div>
+    <h1>LyV <span>Indumentarias</span></h1>
+    <div class="header-sub">Sacá tu turno y llegá a horario</div>
+  </header>
+
+  <nav class="tab-bar">
+    <button class="tab-btn active" onclick="switchTab('cliente')" id="tab-cliente">Sacar Turno</button>
+    <button class="tab-btn" onclick="switchTab('admin')" id="tab-admin">Panel Admin</button>
+  </nav>
+
+  <!-- ═══ VISTA CLIENTE ═══ -->
+  <div class="view active" id="view-cliente">
+    <div class="client-content">
+
+      <div class="status-banner">
+        <div class="status-dot"></div>
+        <span class="status-text">Turnos activos</span>
+        <span class="status-count" id="queue-count">0 en espera</span>
+      </div>
+
+      <div class="form-card" id="form-section">
+        <h2>Registrate para tu turno</h2>
+
+        <div class="field">
+          <label for="inp-nombre">Nombre completo</label>
+          <input type="text" id="inp-nombre" placeholder="Ej: María González" autocomplete="off" />
+        </div>
+
+        <div class="field">
+          <label for="inp-dni">Últimos 3 dígitos del DNI</label>
+          <input type="text" id="inp-dni" placeholder="Ej: 742" maxlength="3" inputmode="numeric" pattern="\d{3}" />
+          <div class="hint">Solo los 3 últimos números, sin puntos ni espacios</div>
+        </div>
+
+        <button class="btn-primary" onclick="registrar()">Obtener mi turno</button>
+      </div>
+
+      <div class="ticket" id="ticket-section">
+        <div class="ticket-label">Tu número de turno</div>
+        <div class="ticket-number" id="tkt-num">—</div>
+        <div class="ticket-name" id="tkt-name"></div>
+        <div class="ticket-meta" id="tkt-meta"></div>
+        <hr class="ticket-divider" />
+        <div class="ticket-tip">
+          Presentate en el local con este número.<br>
+          El personal verificará tu identidad al ingresar.
+        </div>
+        <button class="btn-nuevo" onclick="nuevoTurno()">Registrar otro turno</button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ═══ VISTA ADMIN ═══ -->
+  <div class="view" id="view-admin">
+    <div class="admin-content">
+
+      <div class="admin-top">
+        <h2>Lista de turnos</h2>
+        <span class="stat-pill" id="stat-total">0 turnos</span>
+      </div>
+
+      <div class="search-bar">
+        <input type="text" id="search-inp" placeholder="Buscar nombre o N° de turno..." oninput="renderTurnos()" />
+        <button class="btn-clear" onclick="clearSearch()">Limpiar</button>
+      </div>
+
+      <div class="filter-bar">
+        <button class="filter-btn active" onclick="setFilter('todos', this)">Todos</button>
+        <button class="filter-btn" onclick="setFilter('espera', this)">En espera</button>
+        <button class="filter-btn" onclick="setFilter('atendidos', this)">Atendidos</button>
+      </div>
+
+      <div class="turnos-list" id="turnos-list"></div>
+
+      <button class="btn-export" onclick="exportarCSV()">Exportar lista (CSV)</button>
+      <button class="btn-reset" onclick="resetearTurnos()">Reiniciar todos los turnos</button>
+
+    </div>
+  </div>
+
+</div>
+
+<!-- ═══ MODAL VERIFICACIÓN ═══ -->
+<div class="modal-overlay" id="modal-overlay" onclick="closeModal(event)">
+  <div class="modal" id="modal-box">
+    <div class="modal-handle"></div>
+    <h3>Verificar persona</h3>
+    <p>Confirmá que los datos coincidan con el documento</p>
+    <div id="modal-body"></div>
+    <div class="modal-footer">
+      <button class="btn-modal btn-modal-cancel" onclick="closeModalDirect()">Cerrar</button>
+      <button class="btn-modal btn-modal-ok" id="btn-atender" onclick="marcarAtendido()">Marcar atendido</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+  // ── STORAGE ──
+  function cargarTurnos() {
+    try { return JSON.parse(localStorage.getItem('lyv_turnos') || '[]'); } catch(e) { return []; }
+  }
+  function cargarCounter() {
+    return parseInt(localStorage.getItem('lyv_counter') || '1');
+  }
+  function guardar() {
+    localStorage.setItem('lyv_turnos', JSON.stringify(turnos));
+    localStorage.setItem('lyv_counter', String(counter));
+  }
+
+  let turnos = cargarTurnos();
+  let counter = cargarCounter();
+  let modalTurnoId = null;
+  let filtroActual = 'todos';
+
+  // ── TABS ──
+  function switchTab(tab) {
+    ['cliente','admin'].forEach(t => {
+      document.getElementById('tab-' + t).classList.toggle('active', t === tab);
+      document.getElementById('view-' + t).classList.toggle('active', t === tab);
+    });
+    if (tab === 'admin') renderTurnos();
+    updateQueueCount();
+  }
+
+  // ── TOAST ──
+  function toast(msg) {
+    const el = document.getElementById('toast');
+    el.textContent = msg;
+    el.classList.add('show');
+    setTimeout(() => el.classList.remove('show'), 2500);
+  }
+
+  // ── QUEUE COUNT ──
+  function updateQueueCount() {
+    const n = turnos.filter(t => !t.atendido).length;
+    document.getElementById('queue-count').textContent = n + (n === 1 ? ' en espera' : ' en espera');
+  }
+
+  // ── REGISTRAR TURNO ──
+  function registrar() {
+    const nombre = document.getElementById('inp-nombre').value.trim();
+    const dni    = document.getElementById('inp-dni').value.trim();
+
+    if (!nombre) { toast('Ingresá tu nombre completo'); return; }
+    if (!/^\d{3}$/.test(dni)) { toast('Ingresá exactamente 3 dígitos del DNI'); return; }
+
+    const ahora  = new Date();
+    const hora   = ahora.toLocaleTimeString('es-AR', { hour: '2-digit', minute: '2-digit' });
+    const fecha  = ahora.toLocaleDateString('es-AR');
+    const num    = counter++;
+    const id     = Date.now();
+
+    turnos.push({ id, num, nombre, dni, hora, fecha, atendido: false });
+    guardar();
+    updateQueueCount();
+
+    // mostrar ticket
+    document.getElementById('form-section').style.display = 'none';
+    const tkt = document.getElementById('ticket-section');
+    tkt.style.display = 'block';
+    document.getElementById('tkt-num').textContent  = String(num).padStart(2, '0');
+    document.getElementById('tkt-name').textContent = nombre;
+    document.getElementById('tkt-meta').textContent = 'Registrado a las ' + hora + ' · ' + fecha;
+    toast('¡Turno obtenido! Guardá tu número.');
+  }
+
+  function nuevoTurno() {
+    document.getElementById('inp-nombre').value = '';
+    document.getElementById('inp-dni').value    = '';
+    document.getElementById('form-section').style.display = 'block';
+    document.getElementById('ticket-section').style.display = 'none';
+  }
+
+  // ── FILTRO ──
+  function setFilter(f, btn) {
+    filtroActual = f;
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    renderTurnos();
+  }
+
+  // ── RENDER ADMIN ──
+  function renderTurnos() {
+    const q   = document.getElementById('search-inp').value.toLowerCase();
+    const list = document.getElementById('turnos-list');
+
+    let filtrados = turnos.filter(t => {
+      const matchSearch = t.nombre.toLowerCase().includes(q) || String(t.num).padStart(2,'0').includes(q);
+      const matchFilter =
+        filtroActual === 'todos'      ? true :
+        filtroActual === 'espera'     ? !t.atendido :
+        filtroActual === 'atendidos'  ?  t.atendido : true;
+      return matchSearch && matchFilter;
+    });
+
+    document.getElementById('stat-total').textContent =
+      turnos.length + ' turno' + (turnos.length !== 1 ? 's' : '');
+
+    if (filtrados.length === 0) {
+      list.innerHTML = '<div class="empty-state">Sin turnos para mostrar</div>';
+      return;
+    }
+
+    list.innerHTML = filtrados.slice().reverse().map(t => `
+      <div class="turno-card" id="card-${t.id}">
+        <div class="turno-num ${t.atendido ? 'atendido' : ''}">${String(t.num).padStart(2,'0')}</div>
+        <div class="turno-info">
+          <div class="turno-name">${escHtml(t.nombre)}</div>
+          <div class="turno-meta">DNI: ***${t.dni} &nbsp;·&nbsp; ${t.hora}</div>
+        </div>
+        <span class="${t.atendido ? 'badge-ok' : 'badge-wait'}">${t.atendido ? 'Atendido' : 'En espera'}</span>
+        <div class="turno-actions">
+          <button class="btn-verify" onclick="openModal(${t.id})">Ver</button>
+          <button class="btn-del"    onclick="eliminar(${t.id})">✕</button>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  function clearSearch() {
+    document.getElementById('search-inp').value = '';
+    renderTurnos();
+  }
+
+  // ── MODAL ──
+  function openModal(id) {
+    modalTurnoId = id;
+    const t = turnos.find(x => x.id === id);
+    if (!t) return;
+
+    document.getElementById('btn-atender').textContent =
+      t.atendido ? 'Marcar en espera' : 'Marcar atendido';
+
+    document.getElementById('modal-body').innerHTML = `
+      <div class="verify-row">
+        <span class="verify-label">Turno N°</span>
+        <span class="verify-val">${String(t.num).padStart(2,'0')}</span>
+      </div>
+      <div class="verify-row">
+        <span class="verify-label">Nombre</span>
+        <span class="verify-val">${escHtml(t.nombre)}</span>
+      </div>
+      <div class="verify-row">
+        <span class="verify-label">DNI (últ. 3)</span>
+        <span class="verify-val">***${t.dni}</span>
+        <span class="v-ok">Verificar con doc.</span>
+      </div>
+      <div class="verify-row">
+        <span class="verify-label">Registrado</span>
+        <span class="verify-val" style="font-size:12px">${t.hora} &nbsp;·&nbsp; ${t.fecha}</span>
+      </div>
+      <div class="verify-row">
+        <span class="verify-label">Estado</span>
+        <span class="${t.atendido ? 'v-ok' : 'v-bad'} verify-val">${t.atendido ? 'Atendido' : 'En espera'}</span>
+      </div>
+    `;
+    document.getElementById('modal-overlay').classList.add('open');
+  }
+
+  function closeModal(e) {
+    if (e.target === document.getElementById('modal-overlay')) closeModalDirect();
+  }
+  function closeModalDirect() {
+    document.getElementById('modal-overlay').classList.remove('open');
+    modalTurnoId = null;
+  }
+
+  function marcarAtendido() {
+    const t = turnos.find(x => x.id === modalTurnoId);
+    if (!t) return;
+    t.atendido = !t.atendido;
+    guardar();
+    renderTurnos();
+    closeModalDirect();
+    toast(t.atendido ? 'Marcado como atendido ✓' : 'Vuelto a estado en espera');
+  }
+
+  function eliminar(id) {
+    if (!confirm('¿Eliminar este turno?')) return;
+    turnos = turnos.filter(t => t.id !== id);
+    guardar();
+    renderTurnos();
+    updateQueueCount();
+    toast('Turno eliminado');
+  }
+
+  function resetearTurnos() {
+    if (!confirm('¿Reiniciar TODOS los turnos? Esta acción no se puede deshacer.')) return;
+    turnos  = [];
+    counter = 1;
+    guardar();
+    renderTurnos();
+    updateQueueCount();
+    toast('Lista reiniciada');
+  }
+
+  // ── EXPORTAR CSV ──
+  function exportarCSV() {
+    if (turnos.length === 0) { toast('No hay turnos para exportar'); return; }
+    const header = 'Turno,Nombre,DNI (últimos 3),Hora,Fecha,Estado';
+    const rows   = turnos.map(t =>
+      `${String(t.num).padStart(2,'0')},"${t.nombre}",${t.dni},${t.hora},${t.fecha},${t.atendido ? 'Atendido' : 'En espera'}`
+    );
+    const blob = new Blob(['\uFEFF' + header + '\n' + rows.join('\n')], { type: 'text/csv;charset=utf-8;' });
+    const url  = URL.createObjectURL(blob);
+    const a    = document.createElement('a');
+    a.href = url; a.download = 'turnos_lyv_' + new Date().toISOString().slice(0,10) + '.csv';
+    a.click();
+    URL.revokeObjectURL(url);
+  }
+
+  // ── HELPERS ──
+  function escHtml(s) {
+    return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+
+  // ── PWA INSTALL PROMPT ──
+  let deferredPrompt;
+  window.addEventListener('beforeinstallprompt', e => {
+    e.preventDefault();
+    deferredPrompt = e;
+    document.getElementById('install-bar').classList.add('show');
+  });
+  document.getElementById('install-btn').addEventListener('click', async () => {
+    if (!deferredPrompt) return;
+    deferredPrompt.prompt();
+    const { outcome } = await deferredPrompt.userChoice;
+    if (outcome === 'accepted') document.getElementById('install-bar').classList.remove('show');
+    deferredPrompt = null;
+  });
+
+  // ── INIT ──
+  updateQueueCount();
+  renderTurnos();
+</script>
+</body>
+</html>
