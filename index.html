@@ -20,16 +20,18 @@
     html, body { min-height: 100vh; background: var(--crema); font-family: 'DM Sans', sans-serif; color: var(--negro); }
     .app { max-width: 480px; margin: 0 auto; min-height: 100vh; display: flex; flex-direction: column; box-shadow: 0 0 40px rgba(0,0,0,0.08); }
 
-    .header { background: var(--negro); padding: 1.6rem 1.5rem 1.3rem; text-align: center; }
+    /* HEADER */
+    .header { background: var(--negro); padding: 1.8rem 1.5rem 1.4rem; text-align: center; }
     .header-badge { font-size: 10px; letter-spacing: 3px; color: var(--dorado); text-transform: uppercase; margin-bottom: 6px; }
-    .header h1 { font-family: 'Playfair Display', serif; font-size: 28px; color: #fff; font-weight: 600; }
+    .header h1 { font-family: 'Playfair Display', serif; font-size: 30px; color: #fff; font-weight: 600; }
     .header h1 span { color: var(--dorado); }
-    .header-sub { font-size: 12px; color: rgba(255,255,255,0.45); margin-top: 5px; }
+    .header-sub { font-size: 12px; color: rgba(255,255,255,0.45); margin-top: 6px; }
 
+    /* PAGES */
     .page { display: none; flex: 1; flex-direction: column; }
     .page.active { display: flex; }
 
-    /* ── CAMPO GENÉRICO ── */
+    /* CAMPOS */
     .field { margin-bottom: 1rem; }
     .field label { display: block; font-size: 11px; font-weight: 500; color: var(--gris); letter-spacing: 0.6px; text-transform: uppercase; margin-bottom: 6px; }
     .field input { width: 100%; padding: 12px 14px; border: 1.5px solid var(--borde); border-radius: 10px; font-family: 'DM Sans', sans-serif; font-size: 15px; color: var(--negro); background: var(--crema); outline: none; -webkit-appearance: none; transition: border-color 0.2s; }
@@ -40,36 +42,33 @@
     .btn-primary:active { transform: scale(0.98); }
 
     /* ── CLIENTE ── */
-    .tab-bar { display: flex; background: #111; border-bottom: 1px solid rgba(200,151,58,0.25); }
-    .tab-btn { flex: 1; padding: 11px 8px; background: none; border: none; border-bottom: 2px solid transparent; color: rgba(255,255,255,0.4); font-family: 'DM Sans', sans-serif; font-size: 11px; letter-spacing: 1px; text-transform: uppercase; cursor: pointer; }
-    .tab-btn.active { color: var(--dorado); border-bottom-color: var(--dorado); }
-    .client-content { padding: 1.4rem; flex: 1; }
+    .client-content { padding: 1.6rem; flex: 1; }
 
-    .status-banner { background: var(--negro); border-radius: 12px; padding: 0.9rem 1.1rem; margin-bottom: 1.2rem; display: flex; align-items: center; gap: 10px; }
+    .status-banner { background: var(--negro); border-radius: 12px; padding: 1rem 1.2rem; margin-bottom: 1.4rem; display: flex; align-items: center; gap: 10px; }
     .status-dot { width: 8px; height: 8px; border-radius: 50%; background: #4caf50; animation: pulse 1.5s infinite; flex-shrink: 0; }
     @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
     .status-text { font-size: 13px; color: rgba(255,255,255,0.75); }
-    .status-count { margin-left: auto; font-size: 13px; color: var(--dorado); font-weight: 500; }
+    .status-count { margin-left: auto; font-size: 14px; color: var(--dorado); font-weight: 500; }
 
-    .fila-card { background: var(--negro); border-radius: 16px; padding: 1.4rem; margin-bottom: 1rem; text-align: center; display: none; }
-    .fila-label { font-size: 10px; letter-spacing: 3px; color: var(--dorado); text-transform: uppercase; margin-bottom: 8px; }
-    .fila-num { font-family: 'Playfair Display', serif; font-size: 64px; color: var(--dorado); line-height: 1; }
-    .fila-sub { font-size: 13px; color: rgba(255,255,255,0.55); margin-top: 8px; }
+    .fila-card { background: var(--negro); border-radius: 16px; padding: 1.6rem; margin-bottom: 1.2rem; text-align: center; display: none; }
+    .fila-label { font-size: 10px; letter-spacing: 3px; color: var(--dorado); text-transform: uppercase; margin-bottom: 10px; }
+    .fila-num { font-family: 'Playfair Display', serif; font-size: 72px; color: var(--dorado); line-height: 1; }
+    .fila-sub { font-size: 13px; color: rgba(255,255,255,0.55); margin-top: 10px; }
 
-    .form-card { background: #fff; border-radius: 16px; border: 1px solid rgba(200,151,58,0.18); padding: 1.4rem; margin-bottom: 1rem; }
-    .form-card h2 { font-family: 'Playfair Display', serif; font-size: 19px; margin-bottom: 1.2rem; }
+    .form-card { background: #fff; border-radius: 16px; border: 1px solid rgba(200,151,58,0.18); padding: 1.6rem; margin-bottom: 1rem; }
+    .form-card h2 { font-family: 'Playfair Display', serif; font-size: 20px; margin-bottom: 1.3rem; }
 
-    .ticket { background: var(--negro); border-radius: 16px; padding: 1.8rem 1.4rem; text-align: center; display: none; overflow: hidden; }
-    .ticket-label { font-size: 10px; letter-spacing: 3px; color: var(--dorado); text-transform: uppercase; margin-bottom: 10px; }
-    .ticket-number { font-family: 'Playfair Display', serif; font-size: 80px; color: var(--dorado); line-height: 1; font-weight: 600; }
-    .ticket-name { font-size: 15px; color: rgba(255,255,255,0.75); margin-top: 12px; }
+    .ticket { background: var(--negro); border-radius: 16px; padding: 2rem 1.6rem; text-align: center; display: none; overflow: hidden; }
+    .ticket-label { font-size: 10px; letter-spacing: 3px; color: var(--dorado); text-transform: uppercase; margin-bottom: 12px; }
+    .ticket-number { font-family: 'Playfair Display', serif; font-size: 88px; color: var(--dorado); line-height: 1; font-weight: 600; }
+    .ticket-name { font-size: 16px; color: rgba(255,255,255,0.75); margin-top: 14px; }
     .ticket-pos  { font-size: 13px; color: rgba(255,255,255,0.5); margin-top: 6px; }
-    .ticket-meta { font-size: 11px; color: rgba(255,255,255,0.3); margin-top: 4px; }
-    .ticket-divider { border: none; border-top: 1px dashed rgba(200,151,58,0.3); margin: 1.1rem 0; }
-    .ticket-tip { font-size: 12px; color: rgba(255,255,255,0.5); line-height: 1.6; }
-    .btn-nuevo { margin-top: 1.2rem; width: 100%; padding: 11px; background: transparent; border: 1px solid rgba(200,151,58,0.35); color: var(--dorado); border-radius: 10px; font-family: 'DM Sans', sans-serif; font-size: 13px; cursor: pointer; }
+    .ticket-meta { font-size: 11px; color: rgba(255,255,255,0.3); margin-top: 5px; }
+    .ticket-divider { border: none; border-top: 1px dashed rgba(200,151,58,0.3); margin: 1.2rem 0; }
+    .ticket-tip { font-size: 12px; color: rgba(255,255,255,0.5); line-height: 1.7; }
+    .btn-nuevo { margin-top: 1.3rem; width: 100%; padding: 12px; background: transparent; border: 1px solid rgba(200,151,58,0.35); color: var(--dorado); border-radius: 10px; font-family: 'DM Sans', sans-serif; font-size: 13px; cursor: pointer; }
 
-    /* ── LOGIN ── */
+    /* ── LOGIN ADMIN ── */
     .login-wrap { flex: 1; display: flex; flex-direction: column; justify-content: center; padding: 2rem 1.5rem; }
     .login-card { background: #fff; border-radius: 20px; border: 1px solid rgba(200,151,58,0.2); padding: 2rem 1.5rem; }
     .login-card h2 { font-family: 'Playfair Display', serif; font-size: 20px; margin-bottom: 0.3rem; }
@@ -79,9 +78,9 @@
     .login-link a { color: var(--dorado); text-decoration: none; font-weight: 500; cursor: pointer; }
 
     /* ── ADMIN ── */
-    .admin-topbar { background: var(--negro); padding: 0.8rem 1.2rem; display: flex; align-items: center; justify-content: space-between; }
+    .admin-topbar { background: var(--negro); padding: 0.9rem 1.2rem; display: flex; align-items: center; justify-content: space-between; }
     .admin-topbar span { font-size: 12px; color: rgba(255,255,255,0.5); }
-    .btn-logout { padding: 5px 12px; background: transparent; border: 1px solid rgba(200,151,58,0.35); color: var(--dorado); border-radius: 20px; font-family: 'DM Sans', sans-serif; font-size: 11px; cursor: pointer; }
+    .btn-logout { padding: 5px 14px; background: transparent; border: 1px solid rgba(200,151,58,0.35); color: var(--dorado); border-radius: 20px; font-family: 'DM Sans', sans-serif; font-size: 11px; cursor: pointer; }
     .admin-content { padding: 1.2rem; flex: 1; display: flex; flex-direction: column; }
     .admin-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem; }
     .admin-top h2 { font-family: 'Playfair Display', serif; font-size: 18px; }
@@ -91,12 +90,12 @@
     .search-bar input:focus { border-color: var(--dorado); }
     .btn-clear { padding: 9px 14px; background: #ede8df; border: none; border-radius: 10px; font-family: 'DM Sans', sans-serif; font-size: 13px; cursor: pointer; color: var(--negro); }
     .filter-bar { display: flex; gap: 6px; margin-bottom: 1rem; }
-    .filter-btn { padding: 5px 12px; border-radius: 20px; border: 1.5px solid var(--borde); background: #fff; font-family: 'DM Sans', sans-serif; font-size: 12px; cursor: pointer; color: var(--gris); }
+    .filter-btn { padding: 5px 12px; border-radius: 20px; border: 1.5px solid var(--borde); background: #fff; font-family: 'DM Sans', sans-serif; font-size: 12px; cursor: pointer; color: var(--gris); transition: all 0.15s; }
     .filter-btn.active { background: var(--negro); color: var(--dorado); border-color: var(--negro); }
 
     .turno-card { background: #fff; border-radius: 12px; border: 1px solid var(--borde); padding: 0.85rem 1rem; margin-bottom: 8px; display: flex; align-items: center; gap: 12px; animation: slideIn 0.25s ease; }
     @keyframes slideIn { from{opacity:0;transform:translateY(-6px)} to{opacity:1;transform:translateY(0)} }
-    .turno-num { width: 42px; height: 42px; background: var(--negro); border-radius: 10px; display: flex; align-items: center; justify-content: center; font-family: 'Playfair Display', serif; font-size: 18px; color: var(--dorado); flex-shrink: 0; }
+    .turno-num { width: 44px; height: 44px; background: var(--negro); border-radius: 10px; display: flex; align-items: center; justify-content: center; font-family: 'Playfair Display', serif; font-size: 19px; color: var(--dorado); flex-shrink: 0; }
     .turno-num.atendido { background: #d8f0e0; color: var(--verde); }
     .turno-info { flex: 1; min-width: 0; }
     .turno-name { font-size: 14px; font-weight: 500; color: var(--negro); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
@@ -110,7 +109,7 @@
     .btn-export { width: 100%; padding: 11px; background: #f0ebe0; border: none; border-radius: 10px; font-family: 'DM Sans', sans-serif; font-size: 13px; cursor: pointer; color: var(--negro); margin-top: 10px; }
     .btn-reset  { width: 100%; padding: 10px; background: #fceaea; border: 1px solid #f0c0c0; border-radius: 10px; font-family: 'DM Sans', sans-serif; font-size: 13px; cursor: pointer; color: var(--rojo); margin-top: 6px; }
 
-    /* ── MODAL ── */
+    /* MODAL */
     .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.55); z-index: 100; align-items: flex-end; justify-content: center; }
     .modal-overlay.open { display: flex; }
     .modal { background: #fff; border-radius: 20px 20px 0 0; padding: 1.5rem; width: 100%; max-width: 480px; animation: slideUp 0.25s ease; }
@@ -129,6 +128,7 @@
     .btn-modal-ok     { background: var(--negro); color: var(--dorado); }
     .btn-modal-cancel { background: #f0ebe0; color: var(--negro); }
 
+    /* TOAST */
     .toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%); background: var(--negro); color: var(--dorado); padding: 10px 22px; border-radius: 30px; font-size: 13px; font-weight: 500; z-index: 200; opacity: 0; transition: opacity 0.3s; white-space: nowrap; pointer-events: none; }
     .toast.show { opacity: 1; }
   </style>
@@ -142,23 +142,22 @@
     <div class="header-sub">Sacá tu turno y llegá a horario</div>
   </header>
 
-  <!-- CLIENTE -->
+  <!-- ══ PÁGINA CLIENTE (default) ══ -->
   <div class="page active" id="page-cliente">
-    <nav class="tab-bar">
-      <button class="tab-btn active">Sacar Turno</button>
-      <button class="tab-btn" onclick="showLogin()">Admin</button>
-    </nav>
     <div class="client-content">
+
       <div class="status-banner">
         <div class="status-dot"></div>
         <span class="status-text">Turnos activos</span>
         <span class="status-count" id="queue-count">— en espera</span>
       </div>
+
       <div class="fila-card" id="fila-card">
         <div class="fila-label">Tu posición en la fila</div>
         <div class="fila-num" id="fila-num">—</div>
         <div class="fila-sub" id="fila-sub">personas antes que vos</div>
       </div>
+
       <div class="form-card" id="form-section">
         <h2>Registrate para tu turno</h2>
         <div class="field">
@@ -172,29 +171,31 @@
         </div>
         <button class="btn-primary" onclick="registrar()">Obtener mi turno</button>
       </div>
+
       <div class="ticket" id="ticket-section">
         <div class="ticket-label">Tu número de turno</div>
         <div class="ticket-number" id="tkt-num">—</div>
-        <div class="ticket-name" id="tkt-name"></div>
-        <div class="ticket-pos"  id="tkt-pos"></div>
-        <div class="ticket-meta" id="tkt-meta"></div>
+        <div class="ticket-name"  id="tkt-name"></div>
+        <div class="ticket-pos"   id="tkt-pos"></div>
+        <div class="ticket-meta"  id="tkt-meta"></div>
         <hr class="ticket-divider" />
-        <div class="ticket-tip">Presentate en el local con este número.<br>El personal verificará tu identidad.</div>
+        <div class="ticket-tip">Presentate en el local con este número.<br>El personal verificará tu identidad al ingresar.</div>
         <button class="btn-nuevo" onclick="nuevoTurno()">Registrar otro turno</button>
       </div>
+
     </div>
   </div>
 
-  <!-- LOGIN -->
+  <!-- ══ PÁGINA LOGIN ADMIN ══ -->
   <div class="page" id="page-login">
     <div class="login-wrap">
       <div class="login-card">
         <h2>Panel Admin</h2>
-        <p>Ingresá con tu usuario y contraseña</p>
+        <p>Ingresá con tus credenciales</p>
         <div class="login-error" id="login-error">Usuario o contraseña incorrectos</div>
         <div class="field">
           <label>Usuario</label>
-          <input type="text" id="inp-user" placeholder="admin" autocomplete="username" />
+          <input type="text" id="inp-user" placeholder="usuario" autocomplete="username" />
         </div>
         <div class="field">
           <label>Contraseña</label>
@@ -206,7 +207,7 @@
     </div>
   </div>
 
-  <!-- ADMIN -->
+  <!-- ══ PÁGINA ADMIN ══ -->
   <div class="page" id="page-admin">
     <div class="admin-topbar">
       <span>LyV Indumentarias — Admin</span>
@@ -234,7 +235,7 @@
 
 </div>
 
-<!-- MODAL -->
+<!-- MODAL VERIFICACIÓN -->
 <div class="modal-overlay" id="modal-overlay" onclick="closeModal(event)">
   <div class="modal">
     <div class="modal-handle"></div>
@@ -267,7 +268,7 @@ const firebaseConfig = {
 
 const db = getDatabase(initializeApp(firebaseConfig));
 
-// ── CREDENCIALES ──
+// ── CREDENCIALES ADMIN ──
 const ADMIN_USER = "admin";
 const ADMIN_PASS = "carlos2026";
 
@@ -278,6 +279,12 @@ let modalKey   = null;
 let miTurnoKey = null;
 let esAdmin    = false;
 
+// ── DETECTAR SI ES ACCESO ADMIN POR URL ──
+// Para entrar al admin usás: tu-link/?admin
+if (window.location.search.includes('admin')) {
+  showPage('login');
+}
+
 // ── FIREBASE LISTENER ──
 onValue(ref(db, 'turnos'), snap => {
   turnos = snap.val() || {};
@@ -287,9 +294,9 @@ onValue(ref(db, 'turnos'), snap => {
 });
 
 // ── HELPERS ──
-const esc  = s => String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
-const pad  = n => String(n).padStart(2,'0');
-const $    = id => document.getElementById(id);
+const esc = s => String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+const pad = n => String(n).padStart(2,'0');
+const $   = id => document.getElementById(id);
 
 function toast(msg) {
   const el = $('toast');
@@ -297,6 +304,7 @@ function toast(msg) {
   el.classList.add('show');
   setTimeout(() => el.classList.remove('show'), 2500);
 }
+
 function showPage(id) {
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
   $('page-' + id).classList.add('active');
@@ -305,13 +313,13 @@ function showPage(id) {
 // ── QUEUE COUNT ──
 function updateQueueCount() {
   const n = Object.values(turnos).filter(t => !t.atendido).length;
-  $('queue-count').textContent = n + ' en espera';
+  $('queue-count').textContent = n + (n === 1 ? ' en espera' : ' en espera');
 }
 
 // ── POSICIÓN EN FILA ──
 function actualizarPosicion() {
   if (!miTurnoKey || !turnos[miTurnoKey]) return;
-  const miNum  = turnos[miTurnoKey].num;
+  const miNum   = turnos[miTurnoKey].num;
   const delante = Object.values(turnos).filter(t => !t.atendido && t.num < miNum).length;
   $('fila-num').textContent = delante;
   $('fila-sub').textContent = delante === 1 ? 'persona antes que vos' : 'personas antes que vos';
@@ -321,12 +329,12 @@ function actualizarPosicion() {
     : delante + ' persona' + (delante > 1 ? 's' : '') + ' antes que vos';
 }
 
-// ── REGISTRAR ──
+// ── REGISTRAR TURNO ──
 async function registrar() {
   const nombre = $('inp-nombre').value.trim();
   const dni    = $('inp-dni').value.trim();
-  if (!nombre)              { toast('Ingresá tu nombre completo'); return; }
-  if (!/^\d{3}$/.test(dni)) { toast('Ingresá exactamente 3 dígitos del DNI'); return; }
+  if (!nombre)               { toast('Ingresá tu nombre completo'); return; }
+  if (!/^\d{3}$/.test(dni))  { toast('Ingresá exactamente 3 dígitos del DNI'); return; }
 
   const counterRef = ref(db, 'counter');
   const snap = await get(counterRef);
@@ -359,8 +367,11 @@ function nuevoTurno() {
 }
 
 // ── LOGIN ──
-function showLogin()   { showPage('login'); }
-function showCliente() { showPage('cliente'); }
+function showCliente() {
+  // limpiar ?admin de la URL sin recargar
+  history.replaceState(null, '', window.location.pathname);
+  showPage('cliente');
+}
 
 function doLogin() {
   const u = $('inp-user').value.trim();
@@ -379,6 +390,7 @@ function logout() {
   esAdmin = false;
   $('inp-user').value = '';
   $('inp-pass').value = '';
+  history.replaceState(null, '', window.location.pathname);
   showPage('cliente');
 }
 
@@ -394,9 +406,9 @@ function renderAdmin() {
       const mf = filtro === 'todos' ? true : filtro === 'espera' ? !t.atendido : t.atendido;
       return ms && mf;
     })
-    .sort((a, b) => b[1].num - a[1].num);
+    .sort((a, b) => a[1].num - b[1].num);
 
-  if (filtrados.length === 0) {
+  if (!filtrados.length) {
     $('turnos-list').innerHTML = '<div class="empty-state">Sin turnos para mostrar</div>';
     return;
   }
@@ -472,14 +484,16 @@ function exportarCSV() {
     `${pad(t.num)},"${t.nombre}",${t.dni},${t.hora},${t.fecha},${t.atendido?'Atendido':'En espera'}`
   );
   const blob = new Blob(['\uFEFF' + header + '\n' + rows.join('\n')], { type: 'text/csv;charset=utf-8;' });
-  const a    = Object.assign(document.createElement('a'), { href: URL.createObjectURL(blob), download: 'turnos_lyv_' + new Date().toISOString().slice(0,10) + '.csv' });
+  const a = Object.assign(document.createElement('a'), {
+    href: URL.createObjectURL(blob),
+    download: 'turnos_lyv_' + new Date().toISOString().slice(0,10) + '.csv'
+  });
   a.click();
 }
 
 // ── EXPONER GLOBALES ──
 Object.assign(window, {
-  showLogin, showCliente, doLogin, logout,
-  registrar, nuevoTurno,
+  registrar, nuevoTurno, showCliente, doLogin, logout,
   setFilter, clearSearch,
   closeModal, closeModalDirect, marcarAtendido,
   exportarCSV, resetearTurnos,
