@@ -6,6 +6,11 @@
   <title>Turnos — LyV Indumentarias</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+
+  <!-- Firebase CDN (versión compat, funciona en todos los navegadores) -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     :root {
@@ -20,30 +25,25 @@
     html, body { min-height: 100vh; background: var(--crema); font-family: 'DM Sans', sans-serif; color: var(--negro); }
     .app { max-width: 480px; margin: 0 auto; min-height: 100vh; display: flex; flex-direction: column; box-shadow: 0 0 40px rgba(0,0,0,0.08); }
 
-    /* HEADER */
     .header { background: var(--negro); padding: 1.8rem 1.5rem 1.4rem; text-align: center; }
     .header-badge { font-size: 10px; letter-spacing: 3px; color: var(--dorado); text-transform: uppercase; margin-bottom: 6px; }
     .header h1 { font-family: 'Playfair Display', serif; font-size: 30px; color: #fff; font-weight: 600; }
     .header h1 span { color: var(--dorado); }
     .header-sub { font-size: 12px; color: rgba(255,255,255,0.45); margin-top: 6px; }
 
-    /* PAGES */
     .page { display: none; flex: 1; flex-direction: column; }
     .page.active { display: flex; }
 
-    /* CAMPOS */
     .field { margin-bottom: 1rem; }
     .field label { display: block; font-size: 11px; font-weight: 500; color: var(--gris); letter-spacing: 0.6px; text-transform: uppercase; margin-bottom: 6px; }
     .field input { width: 100%; padding: 12px 14px; border: 1.5px solid var(--borde); border-radius: 10px; font-family: 'DM Sans', sans-serif; font-size: 15px; color: var(--negro); background: var(--crema); outline: none; -webkit-appearance: none; transition: border-color 0.2s; }
     .field input:focus { border-color: var(--dorado); background: #fff; }
     .field .hint { font-size: 11px; color: var(--gris); margin-top: 5px; }
-    .btn-primary { width: 100%; padding: 14px; background: var(--negro); color: var(--dorado); border: none; border-radius: 12px; font-family: 'DM Sans', sans-serif; font-size: 15px; font-weight: 500; cursor: pointer; transition: background 0.2s, transform 0.1s; margin-top: 0.4rem; }
-    .btn-primary:hover { background: #2a1f0f; }
-    .btn-primary:active { transform: scale(0.98); }
+    .btn-primary { width: 100%; padding: 14px; background: var(--negro); color: var(--dorado); border: none; border-radius: 12px; font-family: 'DM Sans', sans-serif; font-size: 15px; font-weight: 500; cursor: pointer; margin-top: 0.4rem; }
+    .btn-primary:active { opacity: 0.85; }
 
-    /* ── CLIENTE ── */
+    /* CLIENTE */
     .client-content { padding: 1.6rem; flex: 1; }
-
     .status-banner { background: var(--negro); border-radius: 12px; padding: 1rem 1.2rem; margin-bottom: 1.4rem; display: flex; align-items: center; gap: 10px; }
     .status-dot { width: 8px; height: 8px; border-radius: 50%; background: #4caf50; animation: pulse 1.5s infinite; flex-shrink: 0; }
     @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
@@ -58,7 +58,7 @@
     .form-card { background: #fff; border-radius: 16px; border: 1px solid rgba(200,151,58,0.18); padding: 1.6rem; margin-bottom: 1rem; }
     .form-card h2 { font-family: 'Playfair Display', serif; font-size: 20px; margin-bottom: 1.3rem; }
 
-    .ticket { background: var(--negro); border-radius: 16px; padding: 2rem 1.6rem; text-align: center; display: none; overflow: hidden; }
+    .ticket { background: var(--negro); border-radius: 16px; padding: 2rem 1.6rem; text-align: center; display: none; }
     .ticket-label { font-size: 10px; letter-spacing: 3px; color: var(--dorado); text-transform: uppercase; margin-bottom: 12px; }
     .ticket-number { font-family: 'Playfair Display', serif; font-size: 88px; color: var(--dorado); line-height: 1; font-weight: 600; }
     .ticket-name { font-size: 16px; color: rgba(255,255,255,0.75); margin-top: 14px; }
@@ -68,7 +68,7 @@
     .ticket-tip { font-size: 12px; color: rgba(255,255,255,0.5); line-height: 1.7; }
     .btn-nuevo { margin-top: 1.3rem; width: 100%; padding: 12px; background: transparent; border: 1px solid rgba(200,151,58,0.35); color: var(--dorado); border-radius: 10px; font-family: 'DM Sans', sans-serif; font-size: 13px; cursor: pointer; }
 
-    /* ── LOGIN ADMIN ── */
+    /* LOGIN */
     .login-wrap { flex: 1; display: flex; flex-direction: column; justify-content: center; padding: 2rem 1.5rem; }
     .login-card { background: #fff; border-radius: 20px; border: 1px solid rgba(200,151,58,0.2); padding: 2rem 1.5rem; }
     .login-card h2 { font-family: 'Playfair Display', serif; font-size: 20px; margin-bottom: 0.3rem; }
@@ -77,7 +77,7 @@
     .login-link { text-align: center; margin-top: 1.2rem; font-size: 13px; color: var(--gris); }
     .login-link a { color: var(--dorado); text-decoration: none; font-weight: 500; cursor: pointer; }
 
-    /* ── ADMIN ── */
+    /* ADMIN */
     .admin-topbar { background: var(--negro); padding: 0.9rem 1.2rem; display: flex; align-items: center; justify-content: space-between; }
     .admin-topbar span { font-size: 12px; color: rgba(255,255,255,0.5); }
     .btn-logout { padding: 5px 14px; background: transparent; border: 1px solid rgba(200,151,58,0.35); color: var(--dorado); border-radius: 20px; font-family: 'DM Sans', sans-serif; font-size: 11px; cursor: pointer; }
@@ -90,11 +90,10 @@
     .search-bar input:focus { border-color: var(--dorado); }
     .btn-clear { padding: 9px 14px; background: #ede8df; border: none; border-radius: 10px; font-family: 'DM Sans', sans-serif; font-size: 13px; cursor: pointer; color: var(--negro); }
     .filter-bar { display: flex; gap: 6px; margin-bottom: 1rem; }
-    .filter-btn { padding: 5px 12px; border-radius: 20px; border: 1.5px solid var(--borde); background: #fff; font-family: 'DM Sans', sans-serif; font-size: 12px; cursor: pointer; color: var(--gris); transition: all 0.15s; }
+    .filter-btn { padding: 5px 12px; border-radius: 20px; border: 1.5px solid var(--borde); background: #fff; font-family: 'DM Sans', sans-serif; font-size: 12px; cursor: pointer; color: var(--gris); }
     .filter-btn.active { background: var(--negro); color: var(--dorado); border-color: var(--negro); }
 
-    .turno-card { background: #fff; border-radius: 12px; border: 1px solid var(--borde); padding: 0.85rem 1rem; margin-bottom: 8px; display: flex; align-items: center; gap: 12px; animation: slideIn 0.25s ease; }
-    @keyframes slideIn { from{opacity:0;transform:translateY(-6px)} to{opacity:1;transform:translateY(0)} }
+    .turno-card { background: #fff; border-radius: 12px; border: 1px solid var(--borde); padding: 0.85rem 1rem; margin-bottom: 8px; display: flex; align-items: center; gap: 12px; }
     .turno-num { width: 44px; height: 44px; background: var(--negro); border-radius: 10px; display: flex; align-items: center; justify-content: center; font-family: 'Playfair Display', serif; font-size: 19px; color: var(--dorado); flex-shrink: 0; }
     .turno-num.atendido { background: #d8f0e0; color: var(--verde); }
     .turno-info { flex: 1; min-width: 0; }
@@ -109,11 +108,9 @@
     .btn-export { width: 100%; padding: 11px; background: #f0ebe0; border: none; border-radius: 10px; font-family: 'DM Sans', sans-serif; font-size: 13px; cursor: pointer; color: var(--negro); margin-top: 10px; }
     .btn-reset  { width: 100%; padding: 10px; background: #fceaea; border: 1px solid #f0c0c0; border-radius: 10px; font-family: 'DM Sans', sans-serif; font-size: 13px; cursor: pointer; color: var(--rojo); margin-top: 6px; }
 
-    /* MODAL */
     .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.55); z-index: 100; align-items: flex-end; justify-content: center; }
     .modal-overlay.open { display: flex; }
-    .modal { background: #fff; border-radius: 20px 20px 0 0; padding: 1.5rem; width: 100%; max-width: 480px; animation: slideUp 0.25s ease; }
-    @keyframes slideUp { from{transform:translateY(30px);opacity:0} to{transform:translateY(0);opacity:1} }
+    .modal { background: #fff; border-radius: 20px 20px 0 0; padding: 1.5rem; width: 100%; max-width: 480px; }
     .modal-handle { width: 36px; height: 4px; background: var(--borde); border-radius: 2px; margin: 0 auto 1.2rem; }
     .modal h3 { font-family: 'Playfair Display', serif; font-size: 18px; margin-bottom: 0.25rem; }
     .modal p  { font-size: 13px; color: var(--gris); margin-bottom: 1rem; }
@@ -128,7 +125,6 @@
     .btn-modal-ok     { background: var(--negro); color: var(--dorado); }
     .btn-modal-cancel { background: #f0ebe0; color: var(--negro); }
 
-    /* TOAST */
     .toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%); background: var(--negro); color: var(--dorado); padding: 10px 22px; border-radius: 30px; font-size: 13px; font-weight: 500; z-index: 200; opacity: 0; transition: opacity 0.3s; white-space: nowrap; pointer-events: none; }
     .toast.show { opacity: 1; }
   </style>
@@ -142,22 +138,19 @@
     <div class="header-sub">Sacá tu turno y llegá a horario</div>
   </header>
 
-  <!-- ══ PÁGINA CLIENTE (default) ══ -->
+  <!-- CLIENTE -->
   <div class="page active" id="page-cliente">
     <div class="client-content">
-
       <div class="status-banner">
         <div class="status-dot"></div>
         <span class="status-text">Turnos activos</span>
         <span class="status-count" id="queue-count">— en espera</span>
       </div>
-
       <div class="fila-card" id="fila-card">
         <div class="fila-label">Tu posición en la fila</div>
         <div class="fila-num" id="fila-num">—</div>
         <div class="fila-sub" id="fila-sub">personas antes que vos</div>
       </div>
-
       <div class="form-card" id="form-section">
         <h2>Registrate para tu turno</h2>
         <div class="field">
@@ -171,7 +164,6 @@
         </div>
         <button class="btn-primary" onclick="registrar()">Obtener mi turno</button>
       </div>
-
       <div class="ticket" id="ticket-section">
         <div class="ticket-label">Tu número de turno</div>
         <div class="ticket-number" id="tkt-num">—</div>
@@ -182,11 +174,10 @@
         <div class="ticket-tip">Presentate en el local con este número.<br>El personal verificará tu identidad al ingresar.</div>
         <button class="btn-nuevo" onclick="nuevoTurno()">Registrar otro turno</button>
       </div>
-
     </div>
   </div>
 
-  <!-- ══ PÁGINA LOGIN ADMIN ══ -->
+  <!-- LOGIN -->
   <div class="page" id="page-login">
     <div class="login-wrap">
       <div class="login-card">
@@ -207,10 +198,10 @@
     </div>
   </div>
 
-  <!-- ══ PÁGINA ADMIN ══ -->
+  <!-- ADMIN -->
   <div class="page" id="page-admin">
     <div class="admin-topbar">
-      <span>LyV Indumentarias — Admin</span>
+      <span>LyV — Admin</span>
       <button class="btn-logout" onclick="logout()">Cerrar sesión</button>
     </div>
     <div class="admin-content">
@@ -235,7 +226,7 @@
 
 </div>
 
-<!-- MODAL VERIFICACIÓN -->
+<!-- MODAL -->
 <div class="modal-overlay" id="modal-overlay" onclick="closeModal(event)">
   <div class="modal">
     <div class="modal-handle"></div>
@@ -251,255 +242,239 @@
 
 <div class="toast" id="toast"></div>
 
-<script type="module">
-import { initializeApp }  from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import { getDatabase, ref, push, onValue, update, remove, get, set }
-  from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+<script>
+  // ── FIREBASE CONFIG ──
+  var firebaseConfig = {
+    apiKey: "AIzaSyA9ziOY913wiq3h7hO5GvgmUQrIfyoYDXI",
+    authDomain: "lyv-turnos.firebaseapp.com",
+    databaseURL: "https://lyv-turnos-default-rtdb.firebaseio.com",
+    projectId: "lyv-turnos",
+    storageBucket: "lyv-turnos.firebasestorage.app",
+    messagingSenderId: "402479725062",
+    appId: "1:402479725062:web:a28824f3ee5ee20ffe6187"
+  };
+  firebase.initializeApp(firebaseConfig);
+  var db = firebase.database();
 
-const firebaseConfig = {
-  apiKey: "AIzaSyA9ziOY913wiq3h7hO5GvgmUQrIfyoYDXI",
-  authDomain: "lyv-turnos.firebaseapp.com",
-  databaseURL: "https://lyv-turnos-default-rtdb.firebaseio.com",
-  projectId: "lyv-turnos",
-  storageBucket: "lyv-turnos.firebasestorage.app",
-  messagingSenderId: "402479725062",
-  appId: "1:402479725062:web:a28824f3ee5ee20ffe6187"
-};
+  // ── CREDENCIALES ──
+  var ADMIN_USER = "admin";
+  var ADMIN_PASS = "carlos2026";
 
-const db = getDatabase(initializeApp(firebaseConfig));
+  // ── ESTADO ──
+  var turnos     = {};
+  var filtro     = 'todos';
+  var modalKey   = null;
+  var miTurnoKey = null;
+  var esAdmin    = false;
 
-// ── CREDENCIALES ADMIN ──
-const ADMIN_USER = "admin";
-const ADMIN_PASS = "carlos2026";
+  // ── HELPERS ──
+  function esc(s) { return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+  function pad(n) { return String(n).padStart(2,'0'); }
+  function $(id) { return document.getElementById(id); }
 
-// ── ESTADO ──
-let turnos     = {};
-let filtro     = 'todos';
-let modalKey   = null;
-let miTurnoKey = null;
-let esAdmin    = false;
-
-// ── DETECTAR SI ES ACCESO ADMIN POR URL ──
-// Para entrar al admin usás: tu-link/?admin
-if (window.location.search.includes('admin')) {
-  showPage('login');
-}
-
-// ── FIREBASE LISTENER ──
-onValue(ref(db, 'turnos'), snap => {
-  turnos = snap.val() || {};
-  updateQueueCount();
-  if (esAdmin)    renderAdmin();
-  if (miTurnoKey) actualizarPosicion();
-});
-
-// ── HELPERS ──
-const esc = s => String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
-const pad = n => String(n).padStart(2,'0');
-const $   = id => document.getElementById(id);
-
-function toast(msg) {
-  const el = $('toast');
-  el.textContent = msg;
-  el.classList.add('show');
-  setTimeout(() => el.classList.remove('show'), 2500);
-}
-
-function showPage(id) {
-  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-  $('page-' + id).classList.add('active');
-}
-
-// ── QUEUE COUNT ──
-function updateQueueCount() {
-  const n = Object.values(turnos).filter(t => !t.atendido).length;
-  $('queue-count').textContent = n + (n === 1 ? ' en espera' : ' en espera');
-}
-
-// ── POSICIÓN EN FILA ──
-function actualizarPosicion() {
-  if (!miTurnoKey || !turnos[miTurnoKey]) return;
-  const miNum   = turnos[miTurnoKey].num;
-  const delante = Object.values(turnos).filter(t => !t.atendido && t.num < miNum).length;
-  $('fila-num').textContent = delante;
-  $('fila-sub').textContent = delante === 1 ? 'persona antes que vos' : 'personas antes que vos';
-  $('fila-card').style.display = 'block';
-  $('tkt-pos').textContent = delante === 0
-    ? '¡Es tu turno! Acercate al local.'
-    : delante + ' persona' + (delante > 1 ? 's' : '') + ' antes que vos';
-}
-
-// ── REGISTRAR TURNO ──
-async function registrar() {
-  const nombre = $('inp-nombre').value.trim();
-  const dni    = $('inp-dni').value.trim();
-  if (!nombre)               { toast('Ingresá tu nombre completo'); return; }
-  if (!/^\d{3}$/.test(dni))  { toast('Ingresá exactamente 3 dígitos del DNI'); return; }
-
-  const counterRef = ref(db, 'counter');
-  const snap = await get(counterRef);
-  const num  = (snap.val() || 0) + 1;
-  await set(counterRef, num);
-
-  const ahora = new Date();
-  const hora  = ahora.toLocaleTimeString('es-AR', { hour: '2-digit', minute: '2-digit' });
-  const fecha = ahora.toLocaleDateString('es-AR');
-
-  const newRef = await push(ref(db, 'turnos'), { num, nombre, dni, hora, fecha, atendido: false });
-  miTurnoKey = newRef.key;
-
-  $('form-section').style.display   = 'none';
-  $('ticket-section').style.display = 'block';
-  $('tkt-num').textContent  = pad(num);
-  $('tkt-name').textContent = nombre;
-  $('tkt-meta').textContent = 'Registrado a las ' + hora + ' · ' + fecha;
-  actualizarPosicion();
-  toast('¡Turno obtenido! Guardá tu número.');
-}
-
-function nuevoTurno() {
-  miTurnoKey = null;
-  $('inp-nombre').value = '';
-  $('inp-dni').value    = '';
-  $('form-section').style.display   = 'block';
-  $('ticket-section').style.display = 'none';
-  $('fila-card').style.display      = 'none';
-}
-
-// ── LOGIN ──
-function showCliente() {
-  // limpiar ?admin de la URL sin recargar
-  history.replaceState(null, '', window.location.pathname);
-  showPage('cliente');
-}
-
-function doLogin() {
-  const u = $('inp-user').value.trim();
-  const p = $('inp-pass').value;
-  if (u === ADMIN_USER && p === ADMIN_PASS) {
-    $('login-error').style.display = 'none';
-    esAdmin = true;
-    showPage('admin');
-    renderAdmin();
-  } else {
-    $('login-error').style.display = 'block';
-  }
-}
-
-function logout() {
-  esAdmin = false;
-  $('inp-user').value = '';
-  $('inp-pass').value = '';
-  history.replaceState(null, '', window.location.pathname);
-  showPage('cliente');
-}
-
-// ── RENDER ADMIN ──
-function renderAdmin() {
-  const q   = $('search-inp').value.toLowerCase();
-  const arr = Object.entries(turnos);
-  $('stat-total').textContent = arr.length + ' turno' + (arr.length !== 1 ? 's' : '');
-
-  const filtrados = arr
-    .filter(([, t]) => {
-      const ms = t.nombre.toLowerCase().includes(q) || pad(t.num).includes(q);
-      const mf = filtro === 'todos' ? true : filtro === 'espera' ? !t.atendido : t.atendido;
-      return ms && mf;
-    })
-    .sort((a, b) => a[1].num - b[1].num);
-
-  if (!filtrados.length) {
-    $('turnos-list').innerHTML = '<div class="empty-state">Sin turnos para mostrar</div>';
-    return;
+  function toast(msg) {
+    var el = $('toast');
+    el.textContent = msg;
+    el.classList.add('show');
+    setTimeout(function(){ el.classList.remove('show'); }, 2500);
   }
 
-  $('turnos-list').innerHTML = filtrados.map(([key, t]) => `
-    <div class="turno-card">
-      <div class="turno-num ${t.atendido ? 'atendido' : ''}">${pad(t.num)}</div>
-      <div class="turno-info">
-        <div class="turno-name">${esc(t.nombre)}</div>
-        <div class="turno-meta">DNI: ***${t.dni} &nbsp;·&nbsp; ${t.hora}</div>
-      </div>
-      <span class="${t.atendido ? 'badge-ok' : 'badge-wait'}">${t.atendido ? 'Atendido' : 'En espera'}</span>
-      <div class="turno-actions">
-        <button class="btn-verify" onclick="_openModal('${key}')">Ver</button>
-        <button class="btn-del"    onclick="_eliminar('${key}')">✕</button>
-      </div>
-    </div>
-  `).join('');
-}
+  function showPage(id) {
+    document.querySelectorAll('.page').forEach(function(p){ p.classList.remove('active'); });
+    $('page-' + id).classList.add('active');
+  }
 
-function setFilter(f, btn) {
-  filtro = f;
-  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-  btn.classList.add('active');
-  renderAdmin();
-}
-function clearSearch() { $('search-inp').value = ''; renderAdmin(); }
+  // ── DETECTAR ACCESO ADMIN ──
+  if (window.location.search.indexOf('admin') !== -1) {
+    showPage('login');
+  }
 
-// ── MODAL ──
-function openModal(key) {
-  modalKey = key;
-  const t = turnos[key]; if (!t) return;
-  $('btn-atender').textContent = t.atendido ? 'Marcar en espera' : 'Marcar atendido';
-  $('modal-body').innerHTML = `
-    <div class="verify-row"><span class="verify-label">Turno N°</span><span class="verify-val">${pad(t.num)}</span></div>
-    <div class="verify-row"><span class="verify-label">Nombre</span><span class="verify-val">${esc(t.nombre)}</span></div>
-    <div class="verify-row"><span class="verify-label">DNI (últ. 3)</span><span class="verify-val">***${t.dni}</span><span class="v-ok">Verificar con doc.</span></div>
-    <div class="verify-row"><span class="verify-label">Registrado</span><span class="verify-val" style="font-size:12px">${t.hora} · ${t.fecha}</span></div>
-    <div class="verify-row"><span class="verify-label">Estado</span><span class="${t.atendido?'v-ok':'v-bad'} verify-val">${t.atendido?'Atendido':'En espera'}</span></div>
-  `;
-  $('modal-overlay').classList.add('open');
-}
-
-function closeModal(e) { if (e.target === $('modal-overlay')) closeModalDirect(); }
-function closeModalDirect() { $('modal-overlay').classList.remove('open'); modalKey = null; }
-
-async function marcarAtendido() {
-  if (!modalKey) return;
-  const t = turnos[modalKey];
-  await update(ref(db, 'turnos/' + modalKey), { atendido: !t.atendido });
-  toast(t.atendido ? 'Vuelto a en espera' : 'Marcado como atendido ✓');
-  closeModalDirect();
-}
-
-async function _eliminar(key) {
-  if (!confirm('¿Eliminar este turno?')) return;
-  await remove(ref(db, 'turnos/' + key));
-  toast('Turno eliminado');
-}
-
-async function resetearTurnos() {
-  if (!confirm('¿Reiniciar TODOS los turnos? No se puede deshacer.')) return;
-  await set(ref(db, 'turnos'), null);
-  await set(ref(db, 'counter'), 0);
-  toast('Lista reiniciada');
-}
-
-function exportarCSV() {
-  const arr = Object.values(turnos);
-  if (!arr.length) { toast('No hay turnos para exportar'); return; }
-  const header = 'Turno,Nombre,DNI (últimos 3),Hora,Fecha,Estado';
-  const rows   = arr.sort((a,b) => a.num - b.num).map(t =>
-    `${pad(t.num)},"${t.nombre}",${t.dni},${t.hora},${t.fecha},${t.atendido?'Atendido':'En espera'}`
-  );
-  const blob = new Blob(['\uFEFF' + header + '\n' + rows.join('\n')], { type: 'text/csv;charset=utf-8;' });
-  const a = Object.assign(document.createElement('a'), {
-    href: URL.createObjectURL(blob),
-    download: 'turnos_lyv_' + new Date().toISOString().slice(0,10) + '.csv'
+  // ── FIREBASE LISTENER ──
+  db.ref('turnos').on('value', function(snap) {
+    turnos = snap.val() || {};
+    updateQueueCount();
+    if (esAdmin)    renderAdmin();
+    if (miTurnoKey) actualizarPosicion();
   });
-  a.click();
-}
 
-// ── EXPONER GLOBALES ──
-Object.assign(window, {
-  registrar, nuevoTurno, showCliente, doLogin, logout,
-  setFilter, clearSearch,
-  closeModal, closeModalDirect, marcarAtendido,
-  exportarCSV, resetearTurnos,
-  _openModal: openModal,
-  _eliminar
-});
+  // ── QUEUE COUNT ──
+  function updateQueueCount() {
+    var n = Object.values(turnos).filter(function(t){ return !t.atendido; }).length;
+    $('queue-count').textContent = n + ' en espera';
+  }
+
+  // ── POSICIÓN EN FILA ──
+  function actualizarPosicion() {
+    if (!miTurnoKey || !turnos[miTurnoKey]) return;
+    var miNum   = turnos[miTurnoKey].num;
+    var delante = Object.values(turnos).filter(function(t){ return !t.atendido && t.num < miNum; }).length;
+    $('fila-num').textContent = delante;
+    $('fila-sub').textContent = delante === 1 ? 'persona antes que vos' : 'personas antes que vos';
+    $('fila-card').style.display = 'block';
+    $('tkt-pos').textContent = delante === 0
+      ? '¡Es tu turno! Acercate al local.'
+      : delante + ' persona' + (delante > 1 ? 's' : '') + ' antes que vos';
+  }
+
+  // ── REGISTRAR TURNO ──
+  function registrar() {
+    var nombre = $('inp-nombre').value.trim();
+    var dni    = $('inp-dni').value.trim();
+    if (!nombre)              { toast('Ingresá tu nombre completo'); return; }
+    if (!/^\d{3}$/.test(dni)) { toast('Ingresá exactamente 3 dígitos del DNI'); return; }
+
+    db.ref('counter').transaction(function(current) {
+      return (current || 0) + 1;
+    }, function(error, committed, snap) {
+      if (error || !committed) { toast('Error al registrar, intentá de nuevo'); return; }
+      var num   = snap.val();
+      var ahora = new Date();
+      var hora  = ahora.toLocaleTimeString('es-AR', { hour: '2-digit', minute: '2-digit' });
+      var fecha = ahora.toLocaleDateString('es-AR');
+
+      var newRef = db.ref('turnos').push({ num: num, nombre: nombre, dni: dni, hora: hora, fecha: fecha, atendido: false });
+      miTurnoKey = newRef.key;
+
+      $('form-section').style.display   = 'none';
+      $('ticket-section').style.display = 'block';
+      $('tkt-num').textContent  = pad(num);
+      $('tkt-name').textContent = nombre;
+      $('tkt-meta').textContent = 'Registrado a las ' + hora + ' · ' + fecha;
+      actualizarPosicion();
+      toast('¡Turno obtenido! Guardá tu número.');
+    });
+  }
+
+  function nuevoTurno() {
+    miTurnoKey = null;
+    $('inp-nombre').value = '';
+    $('inp-dni').value    = '';
+    $('form-section').style.display   = 'block';
+    $('ticket-section').style.display = 'none';
+    $('fila-card').style.display      = 'none';
+  }
+
+  // ── LOGIN ──
+  function showCliente() {
+    history.replaceState(null, '', window.location.pathname);
+    showPage('cliente');
+  }
+
+  function doLogin() {
+    var u = $('inp-user').value.trim();
+    var p = $('inp-pass').value;
+    if (u === ADMIN_USER && p === ADMIN_PASS) {
+      $('login-error').style.display = 'none';
+      esAdmin = true;
+      showPage('admin');
+      renderAdmin();
+    } else {
+      $('login-error').style.display = 'block';
+    }
+  }
+
+  function logout() {
+    esAdmin = false;
+    $('inp-user').value = '';
+    $('inp-pass').value = '';
+    history.replaceState(null, '', window.location.pathname);
+    showPage('cliente');
+  }
+
+  // ── RENDER ADMIN ──
+  function renderAdmin() {
+    var q   = $('search-inp').value.toLowerCase();
+    var arr = Object.entries(turnos);
+    $('stat-total').textContent = arr.length + ' turno' + (arr.length !== 1 ? 's' : '');
+
+    var filtrados = arr.filter(function(entry) {
+      var t  = entry[1];
+      var ms = t.nombre.toLowerCase().indexOf(q) !== -1 || pad(t.num).indexOf(q) !== -1;
+      var mf = filtro === 'todos' ? true : filtro === 'espera' ? !t.atendido : t.atendido;
+      return ms && mf;
+    }).sort(function(a, b){ return a[1].num - b[1].num; });
+
+    if (!filtrados.length) {
+      $('turnos-list').innerHTML = '<div class="empty-state">Sin turnos para mostrar</div>';
+      return;
+    }
+
+    $('turnos-list').innerHTML = filtrados.map(function(entry) {
+      var key = entry[0], t = entry[1];
+      return '<div class="turno-card">' +
+        '<div class="turno-num ' + (t.atendido ? 'atendido' : '') + '">' + pad(t.num) + '</div>' +
+        '<div class="turno-info">' +
+          '<div class="turno-name">' + esc(t.nombre) + '</div>' +
+          '<div class="turno-meta">DNI: ***' + t.dni + ' &nbsp;·&nbsp; ' + t.hora + '</div>' +
+        '</div>' +
+        '<span class="' + (t.atendido ? 'badge-ok' : 'badge-wait') + '">' + (t.atendido ? 'Atendido' : 'En espera') + '</span>' +
+        '<div class="turno-actions">' +
+          '<button class="btn-verify" onclick="openModal(\'' + key + '\')">Ver</button>' +
+          '<button class="btn-del" onclick="eliminar(\'' + key + '\')">✕</button>' +
+        '</div>' +
+      '</div>';
+    }).join('');
+  }
+
+  function setFilter(f, btn) {
+    filtro = f;
+    document.querySelectorAll('.filter-btn').forEach(function(b){ b.classList.remove('active'); });
+    btn.classList.add('active');
+    renderAdmin();
+  }
+  function clearSearch() { $('search-inp').value = ''; renderAdmin(); }
+
+  // ── MODAL ──
+  function openModal(key) {
+    modalKey = key;
+    var t = turnos[key]; if (!t) return;
+    $('btn-atender').textContent = t.atendido ? 'Marcar en espera' : 'Marcar atendido';
+    $('modal-body').innerHTML =
+      '<div class="verify-row"><span class="verify-label">Turno N°</span><span class="verify-val">' + pad(t.num) + '</span></div>' +
+      '<div class="verify-row"><span class="verify-label">Nombre</span><span class="verify-val">' + esc(t.nombre) + '</span></div>' +
+      '<div class="verify-row"><span class="verify-label">DNI (últ. 3)</span><span class="verify-val">***' + t.dni + '</span><span class="v-ok">Verificar con doc.</span></div>' +
+      '<div class="verify-row"><span class="verify-label">Registrado</span><span class="verify-val" style="font-size:12px">' + t.hora + ' · ' + t.fecha + '</span></div>' +
+      '<div class="verify-row"><span class="verify-label">Estado</span><span class="' + (t.atendido?'v-ok':'v-bad') + ' verify-val">' + (t.atendido?'Atendido':'En espera') + '</span></div>';
+    $('modal-overlay').classList.add('open');
+  }
+
+  function closeModal(e) { if (e.target === $('modal-overlay')) closeModalDirect(); }
+  function closeModalDirect() { $('modal-overlay').classList.remove('open'); modalKey = null; }
+
+  function marcarAtendido() {
+    if (!modalKey) return;
+    var t = turnos[modalKey];
+    db.ref('turnos/' + modalKey).update({ atendido: !t.atendido });
+    toast(t.atendido ? 'Vuelto a en espera' : 'Marcado como atendido ✓');
+    closeModalDirect();
+  }
+
+  function eliminar(key) {
+    if (!confirm('¿Eliminar este turno?')) return;
+    db.ref('turnos/' + key).remove();
+    toast('Turno eliminado');
+  }
+
+  function resetearTurnos() {
+    if (!confirm('¿Reiniciar TODOS los turnos? No se puede deshacer.')) return;
+    db.ref('turnos').remove();
+    db.ref('counter').set(0);
+    toast('Lista reiniciada');
+  }
+
+  function exportarCSV() {
+    var arr = Object.values(turnos);
+    if (!arr.length) { toast('No hay turnos para exportar'); return; }
+    var header = 'Turno,Nombre,DNI (últimos 3),Hora,Fecha,Estado';
+    var rows   = arr.sort(function(a,b){ return a.num - b.num; }).map(function(t){
+      return pad(t.num) + ',"' + t.nombre + '",' + t.dni + ',' + t.hora + ',' + t.fecha + ',' + (t.atendido?'Atendido':'En espera');
+    });
+    var blob = new Blob(['\uFEFF' + header + '\n' + rows.join('\n')], { type: 'text/csv;charset=utf-8;' });
+    var a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = 'turnos_lyv_' + new Date().toISOString().slice(0,10) + '.csv';
+    a.click();
+  }
 </script>
 </body>
 </html>
